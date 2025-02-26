@@ -1,0 +1,283 @@
+---
+title: "Some of my best friends are zombies"
+author: "Jaclyn Meyer"
+output:
+  rmdformats::readthedown:
+    toc: TRUE
+    toc_depth: 3
+---
+
+*I cannot get a table of contents to work!!*
+
+```{r}
+knitr::include_graphics("/Users/jaclynmeyer/AN588 Coding/AN588_Zombies_Jaclynm/tina.zombies.gif")
+```
+
+```{r}
+library("curl")
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/refs/heads/master/AN588_Spring25/zombies.csv")
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(d)
+```
+
+## 1. Calculate the *population* mean and standard deviation for each quantitative random variable (height, weight, age, number of zombies killed, and years of education).
+
+```{r}
+#HEIGHT
+h<-d$height
+mh<-mean(h)
+sdh <- sd(h) * sqrt((length(h) - 1) / length(h))
+mh
+sdh
+```
+
+```{r}
+#WEIGHT
+w<-d$weight
+mw<-mean(w)
+sw<-sd(w) * sqrt((length(w) - 1) / length(w))
+mw
+sw
+```
+
+```{r}
+#AGE
+a<-d$age
+ma<-mean(a)
+sa<-sd(a) * sqrt((length(a) - 1) / length(a))
+ma
+sa
+```
+
+```{r}
+#ZOMBIES KILLED
+z<-d$zombies_killed
+mz<-mean(z)
+sz<-sd(z) * sqrt((length(z) - 1) / length(z))
+mz
+sz
+```
+
+```{r}
+#EDUCATION
+e<-d$years_of_education
+me<-mean(e)
+se<-sd(e) * sqrt((length(e) - 1) / length(e))
+me
+se
+```
+
+## 2. Use {ggplot} to make boxplots of each of these variables by gender.
+
+```{r}
+x <- d$height[d$gender == "Male"]
+y <- d$height[d$gender == "Female"]
+z <- d$height[d$gender == "NonBinary"]
+par(mfrow = c(1, 2))
+boxplot(x, main = "Height", xlab = "Males")
+boxplot(y, main = "Height", xlab = "Females")
+boxplot(z, main = "Height", xlab = "NonBinary")
+```
+
+\^Not sure why NonBinary is on another window, can only 2 boxplots fit?
+
+```{r}
+x <- d$weight[d$gender == "Male"]
+y <- d$weight[d$gender == "Female"]
+z <- d$weight[d$gender == "NonBinary"]
+par(mfrow = c(1, 2))
+boxplot(x, main = "Weight", xlab = "Males")
+boxplot(y, main = "Weight", xlab = "Females")
+boxplot(z, main = "Weight", xlab = "NonBinary")
+```
+
+```{r}
+x <- d$age[d$gender == "Male"]
+y <- d$age[d$gender == "Female"]
+z <- d$age[d$gender == "NonBinary"]
+par(mfrow = c(1, 2))
+boxplot(x, main = "Age", xlab = "Males")
+boxplot(y, main = "Age", xlab = "Females")
+boxplot(z, main = "Age", xlab = "NonBinary")
+```
+
+```{r}
+x <- d$zombies_killed[d$gender == "Male"]
+y <- d$zombies_killed[d$gender == "Female"]
+z <- d$zombies_killed[d$gender == "NonBinary"]
+par(mfrow = c(1, 2))
+boxplot(x, main = "Zombies Killed", xlab = "Males")
+boxplot(y, main = "Zombies Killed", xlab = "Females")
+boxplot(z, main = "Zombies Killed", xlab = "NonBinary")
+```
+
+```{r}
+x <- d$years_of_education[d$gender == "Male"]
+y <- d$years_of_education[d$gender == "Female"]
+z <- d$years_of_education[d$gender == "NonBinary"]
+par(mfrow = c(1, 2))
+boxplot(x, main = "Years of education", xlab = "Males")
+boxplot(y, main = "Years of education", xlab = "Females")
+boxplot(z, main = "Years of education", xlab = "NonBinary")
+```
+
+## 3. Use {ggplot} to make scatterplots of height and weight in relation to age. Do these variables seem to be related? In what way?
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(d, aes(x = age, y = height)) +
+    geom_point() +
+    labs(title = "Height and Age", x = "Age", y = "Height") +
+    theme_minimal()
+```
+
+```{r}
+ggplot(d, aes(x = age, y = weight)) +
+    geom_point() +
+    labs(title = "Weight and Age", x = "Age", y = "Weight") +
+    theme_minimal()
+```
+
+#### To me it seems that height and age are positively associated with each other. While weight and age are also positively associated with each other the associated is weaker.
+
+## 4. Using histograms and Q-Q plots, check whether the quantitative variables seem to be drawn from a normal distribution. Which seem to be and which do not (hint: not all are drawn from the normal distribution)? For those that are not normal, can you determine from which common distribution they are drawn?
+
+```{r}
+#HEIGHT
+hist(d$height, main = "Height", xlab = "Height", col = "lightblue", border = "black")
+qqnorm(d$height, main = "Height")
+qqline(d$height, col = "red")
+```
+
+```{r}
+#WEIGHT
+hist(d$weight, main = "Weight", xlab = "Weight", col = "lightblue", border = "black")
+qqnorm(d$weight, main = "Weight")
+qqline(d$weight, col = "red")
+```
+
+```{r}
+#AGE
+hist(d$age, main = "AGE", xlab = "AGE", col = "lightblue", border = "black")
+qqnorm(d$age, main = "Age")
+qqline(d$age, col = "red")
+```
+
+```{r}
+#ZOMBIES KILLED
+hist(d$zombies_killed, main = "Zombies Killed", xlab = "Zombied Killed", col = "lightblue", border = "black")
+qqnorm(d$zombies_killed, main = "Zombies Killed")
+qqline(d$zombies_killed, col = "red")
+```
+
+```{r}
+#EDUCATION
+hist(d$years_of_education, main = "Years of education", xlab = "Years of education", col = "lightblue", border = "black")
+qqnorm(d$years_of_education, main = "Years of education")
+qqline(d$years_of_education, col = "red")
+```
+
+### Height, weight, and age seem to be drawn from a normal distribution. Number of zombies killed does not seem to be drawn from a normal distribution rather it is right-skewed. Years of education also does not seem to be drawn from a normal distribution and is right-skewed
+
+^Not sure if the last two are what he is asking for^
+
+## 5. Now use the `sample()` function to sample ONE subset of 30 zombie survivors (without replacement) from this population and calculate the mean and sample standard deviation for each variable. Also estimate the standard error for each variable, and construct the 95% confidence interval for each mean. Note that for the variables that are not drawn from the normal distribution, you may need to base your estimate of the CIs on slightly different code than for the normal…
+
+```{r}
+set.seed(123) #for reproducibility
+sample<-sample(1:nrow(d),size=30,replace=FALSE)
+```
+
+```{r}
+#HEIGHT
+sample_height <- d$height[sample]
+msh<-mean(sample_height)
+ssh<-sd(sample_height)
+msh
+ssh
+```
+
+*Using T-test to find Cis. mh= population mean for height*
+
+```{r}
+sem<-ssh/sqrt(30)
+sem
+t <- t.test(x = x, mh = mh, alternative = "two.sided")
+ci <- t$conf.int
+ci
+```
+
+```{r}
+#WEIGHT
+sample_weight<-d$weight[sample]
+msw<-mean(sample_weight)
+ssw<-sd(sample_weight)
+msw
+ssw
+```
+
+```{r}
+sem<-ssw/sqrt(30)
+sem
+t <- t.test(x = x, mw = mw, alternative = "two.sided")
+ci <- t$conf.int
+ci
+```
+
+```{r}
+#AGE
+sample_age<-d$age[sample]
+msa<-mean(sample_age)
+ssa<-sd(sample_age)
+msa
+ssa
+```
+
+```{r}
+sem<-ssa/sqrt(30)
+sem
+t <- t.test(x = x, ma = ma, alternative = "two.sided")
+ci <- t$conf.int
+ci
+```
+
+```{r}
+#ZOMBIES KILLED
+sample_zombies<-d$zombies_killed[sample]
+msz<-mean(sample_zombies)
+ssz<-sd(sample_zombies)
+msz
+ssz
+```
+
+```{r}
+sem<-ssz/sqrt(30)
+sem
+t <- t.test(x = x, mz = mz, alternative = "two.sided")
+ci <- t$conf.int
+ci
+```
+
+```{r}
+#EDUCATION
+sample_ed<-d$years_of_education[sample]
+mse<-mean(sample_ed)
+sse<-sd(sample_ed)
+mse
+sse
+```
+
+```{r}
+sem<-sse/sqrt(30)
+sem
+t <- t.test(x = x, me = me, alternative = "two.sided")
+ci <- t$conf.int
+ci
+```
+
+## 6. Now draw 99 more random samples of 30 zombie apocalypse survivors, and calculate the mean for each variable for each of these samples. Together with the first sample you drew, you now have a set of 100 means for each variable (each based on 30 observations), which constitutes a *sampling* distribution for each variable. What are the means and standard deviations of this distribution of means for each variable? How do the standard deviations of means compare to the standard errors estimated in \[5\]? What do these sampling distributions look like (a graph might help here)? Are they normally distributed? What about for those variables that you concluded were *not* originally drawn from a normal distribution?
+
+*Honestly, totally lost on this one, I have tried but nothing seems to work, would love some help :)*
